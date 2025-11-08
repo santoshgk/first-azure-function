@@ -1,0 +1,11 @@
+on: [push]
+name: Deploy C# Function
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: Azure/functions-action@v1
+        with:
+          app-name: first-azure-function-${{ github.run_id }}
+          package: .
