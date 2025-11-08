@@ -1,0 +1,26 @@
+name: Deploy to Azure Functions
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: '8.0.x'
+
+    - name: Build & Deploy
+      run: |
+        pushd './'
+        dotnet publish -c Release
+        popd
+      env:
+        AZURE_FUNCTIONAPP_NAME: first-azure-function-${{ github.run_number }}
+        AZURE_FUNCTIONAPP_PACKAGE_PATH: './'
+        PUBLISH_PROFILE: ${{ secrets.AZURE_FUNCTIONAPP_PUBLISH_PROFILE }}
